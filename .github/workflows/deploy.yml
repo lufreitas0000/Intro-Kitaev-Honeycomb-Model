@@ -1,30 +1,94 @@
 name: Build and Deploy PlutoPages Site
+
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch: # Allows manual triggering
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  build-deploy:
+  # Build job
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # Needed to deploy to gh-pages
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Julia
         uses: julia-actions/setup-julia@v2
         with:
-          version: '1.11' # Match the Julia version with your Dockerfile
-
+          version: '1.11'
       - name: Install dependencies and build site
-        # --project ensures we use the project's own environment
         run: julia --project -e 'using Pkg; Pkg.instantiate(); using PlutoPages; PlutoPages.build_site("notes")'
-
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: __site # The folder the action should deploy.
+          path: ./__site
+
+  # Deployment job
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+# name: Build and Deploy PlutoPages Site
+
+# on:
+#   # Runs on pushes targeting the default branch
+#   push:
+#     branches: ["main"]
+
+#   # Allows you to run this workflow manually from the Actions tab
+#   workflow_dispatch:
+
+# # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# permissions:
+#   contents: read
+#   pages: write
+#   id-token: write
+
+# # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# concurrency:
+#   group: "pages"
+#   cancel-in-progress: false
+
+# jobs:
+#   # Build job
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+#       - name: Setup Julia
+#         uses: julia-actions/setup-julia@v2
+#         with:
+#           version: '1.11'
+#       - name: Install dependencies and build site 🔧
+#         run: julia --project -e 'using Pkg; Pkg.instantiate(); using PlutoPages; PlutoPages.build_site("notes")'
+#       - name: Upload artifact
+#         uses: actions/upload-pages-artifact@v3
+#         with:
+#           path: ./__site
+
+#   # Deployment job
+#   deploy:
+#     environment:
+#       name: github-pages
+#       url: ${{ steps.deployment.outputs.page_url }}
+#     runs-on: ubuntu-latest
+#     needs: build
+#     steps:
+#       - name: Deploy to GitHub Pages
+#         id: deployment
+#         uses: actions/deploy-pages@v4
