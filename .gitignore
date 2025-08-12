@@ -1,0 +1,14 @@
+# Julia
+*.log
+*.out
+
+
+# Project build artifacts
+/build/
+
+# Pluto and PlutoPages
+.pluto_notebook_cache/
+__site/
+
+# VS Code
+.vscode/

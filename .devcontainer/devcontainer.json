@@ -1,0 +1,17 @@
+{
+    "name": "Julia (MyTestProject)",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "forwardPorts": [1234],
+    "settings": {
+        "julia.environmentPath": "."
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "julialang.language-julia"
+            ]
+        }
+    },
+}

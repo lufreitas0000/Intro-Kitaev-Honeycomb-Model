@@ -1,0 +1,30 @@
+name: Build and Deploy PlutoPages Site
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed to deploy to gh-pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Julia
+        uses: julia-actions/setup-julia@v2
+        with:
+          version: '1.11' # Match the Julia version with your Dockerfile
+
+      - name: Install dependencies and build site 🔧
+        # --project ensures we use the project's own environment
+        run: julia --project -e 'using Pkg; Pkg.instantiate(); using PlutoPages; PlutoPages.build_site("notes")'
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: __site # The folder the action should deploy.
