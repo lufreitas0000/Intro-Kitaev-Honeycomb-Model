@@ -1,7 +1,7 @@
 {
-    "name": "JULIA_KHM",
+    "name": "Julia (JULIA_KHM)",
     "build": {
-        "dockerfile": "Dockerfile"
+        "dockerfile": ".devcontainer/Dockerfile"
     },
     "forwardPorts": [
         1234

@@ -1,8 +1,8 @@
-module MyTestProject
+module KHM
 
 greet() = print("Hello World!")
 
-end # module MyTestProject
+end # module KHM
 
 export greet
 
@@ -12,5 +12,5 @@ export greet
 Prints a welcome message for the project.
 """
 function greet()
-    println("Welcome to the MyTestProject project! Happy coding! ")
+    println("Welcome to the KHM project! Happy coding! ")
 end

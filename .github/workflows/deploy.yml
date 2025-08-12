@@ -19,7 +19,7 @@ jobs:
         with:
           version: '1.11' # Match the Julia version with your Dockerfile
 
-      - name: Install dependencies and build site 🔧
+      - name: Install dependencies and build site
         # --project ensures we use the project's own environment
         run: julia --project -e 'using Pkg; Pkg.instantiate(); using PlutoPages; PlutoPages.build_site("notes")'
 
