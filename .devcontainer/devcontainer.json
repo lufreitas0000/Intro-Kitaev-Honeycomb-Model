@@ -1,17 +1,20 @@
 {
-    "name": "Julia (MyTestProject)",
+    "name": "JULIA_KHM",
     "build": {
         "dockerfile": "Dockerfile"
     },
-    "forwardPorts": [1234],
-    "settings": {
-        "julia.environmentPath": "."
-    },
+    "forwardPorts": [
+        1234
+    ],
     "customizations": {
         "vscode": {
             "extensions": [
                 "julialang.language-julia"
-            ]
+            ],
+            "settings": {
+                "julia.environmentPath": "."
+            }
         }
     },
+    "postCreateCommand": "julia --project=. -e 'using Pkg; Pkg.instantiate()'"
 }

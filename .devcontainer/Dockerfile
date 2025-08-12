@@ -2,10 +2,14 @@
 # Using a specific version tag ensures reproducibility.
 FROM julia:1.11
 
-# It's good practice to pre-install dependencies for the dev environment.
-# Note: These are for the container, not the project itself.
-# The project's dependencies are handled by Pkg.instantiate().
-RUN julia -e 'using Pkg; Pkg.add(["Revise", "Pluto"]); Pkg.precompile()'
+# Add this line to install Git
+RUN apt-get update && apt-get install -y git
+
+# Pre-install and precompile key Julia packages to speed up first launch
+RUN julia -e 'using Pkg;
+Pkg.add(["Revise", "Pluto", "Plots", "Arpack", "PlutoPages"]);
+Pkg.precompile()'
+
 
 # Set the working directory in the container
 WORKDIR /workspace
